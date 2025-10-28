@@ -7,7 +7,7 @@ const Header = () => {
     { title: "Login", icon: <LockIcon className="w-5 h-5" /> },
   ];
   return (
-    <div className="bg-background border-b border-gray-300/50 fixed w-full top-0 left-0 z-50">
+    <div className="bg-background fixed w-full top-0 left-0 z-50">
       <div className="app-container flex justify-between items-center h-20">
         <h2 className="text-2xl font-bold">Wire Aza</h2>
         <div className="flex items-center gap-4 md:gap-6">
