@@ -123,5 +123,9 @@
 }
 
 body {
-  font-family: var(--font-mona-sans), sans-serif;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.app-container {
+  @apply container mx-auto xl:px-16 px-5;
 }
