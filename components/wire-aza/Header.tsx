@@ -17,7 +17,9 @@ const Header = () => {
               className="flex rounded-2xl transition-all cursor-pointer   hover:text-gray-600 items-center space-x-2 "
             >
               {link.icon}
-              <span>{link.title}</span>
+              <span className="hidden md:block">
+                {link.title}
+              </span>
             </div>
           ))}
         </div>
