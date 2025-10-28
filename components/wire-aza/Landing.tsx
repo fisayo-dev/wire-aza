@@ -17,11 +17,11 @@ const Landing = () => {
     >
       {/* Subtle green dot at top-center (like in your image) */}
       <div className="absolute top-16 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-sm text-gray-500">
-        💰💲
+        <span className="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
         Sending Money doesn&apos;t have to be hard
       </div>
 
-      <div className="max-w-4xl mx-auto text-center grid gap-2 md:gap-4 relative z-10 mt-4">
+      <div className="max-w-4xl mx-auto text-center grid gap-2 md:gap-4 relative z-10 mt-8">
         {/* Main Heading */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 tracking-tight">
           Present your account <br className="hidden sm:block" />
