@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Bitcoin, DollarSign, Banknote } from "lucide-react";
+import { Bitcoin, DollarSign } from "lucide-react";
 import Link from "next/link";
 import Bank from "../icons/Bank";
 
