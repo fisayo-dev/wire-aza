@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import { Bitcoin, DollarSign, Banknote } from "lucide-react";
 import Link from "next/link";
+import Bank from "../icons/Bank";
 
 const Landing = () => {
   const iconContainer =
@@ -79,10 +80,7 @@ const Landing = () => {
           "animate-float-delay-3 opacity-90"
         )}
       >
-        <Banknote
-          className="w-full h-full text-white drop-shadow-md"
-          strokeWidth={2.5}
-        />
+        <Bank/>
       </div>
 
       {/* ====================== MAIN CONTENT ====================== */}
