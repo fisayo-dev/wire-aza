@@ -26,9 +26,9 @@ export function SignupForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Create your account</CardTitle>
+          <CardTitle className="text-2xl">Place your Aza(s).</CardTitle>
           <CardDescription>
-            Enter your email below to create your account
+            Present your account details professionally.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -69,9 +69,9 @@ export function SignupForm({
                 </FieldDescription>
               </Field>
               <Field>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit">Create my aza vault</Button>
                 <FieldDescription className="text-center">
-                  Already have an account? <Link href="/login">Sign in</Link>
+                  Already have an account? <Link href="/login">Log in</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>

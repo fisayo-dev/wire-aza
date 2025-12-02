@@ -25,10 +25,8 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Welcome back</CardTitle>
-          <CardDescription>
-            Login with your Apple or Google account
-          </CardDescription>
+          <CardTitle className="text-2xl">Jump Right In</CardTitle>
+          <CardDescription>Your account number doesn&apos;t have appear basic.</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
