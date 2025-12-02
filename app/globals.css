@@ -45,74 +45,74 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Core neutrals */
+  --background: oklch(100% 0 0); /* Pure white */
+  --foreground: oklch(12% 0 0); /* Almost black – matches the headline text */
+
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+
+  /* Primary brand color – Wire Aza green (#00D4A9 → close OKLCH match) */
+  --primary: oklch(62.7% 0.194 149.214); /* Vibrant teal-green */
+  --primary-foreground: oklch(98% 0.02 0); /* Near-white for text on green */
+
+  /* Secondary / muted */
+  --secondary: oklch(96% 0.02 0); /* Very light gray */
+  --secondary-foreground: oklch(30% 0.02 0);
+  --muted: oklch(94% 0.01 0);
+  --muted-foreground: oklch(50% 0.03 0);
+
+  /* Accents */
+  --accent: oklch(95.126% 0.0399 149.943);
+  --accent-foreground: var(--foreground);
+
+  /* Bitcoin orange accent – close to #F7931A */
+  --bitcoin: oklch(75% 0.22 70);
+
+  /* Borders & inputs – subtle but visible */
+  --border: oklch(90% 0.01 0 / 0.6);
+  --input: oklch(88% 0.01 0 / 0.5);
+  --ring: var(--primary);
+
+  /* Destructive (kept red but toned down) */
+  --destructive: oklch(65% 0.25 28);
+  --destructive-foreground: oklch(98% 0 0);
+
+  /* Radius */
+  --radius: 0.75rem; /* Slightly larger than original for modern feel */
+
+  /* Charts – optional nice palette */
+  --chart-1: oklch(75% 0.22 70); /* Bitcoin orange */
+  --chart-2: oklch(80% 0.18 165); /* Primary green */
+  --chart-3: oklch(70% 0.2 200);
+  --chart-4: oklch(75% 0.18 130);
+  --chart-5: oklch(68% 0.22 20);
 }
 
+/* Dark mode – clean & high-contrast */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
+  --background: oklch(14% 0 0);
+  --foreground: oklch(96% 0 0);
 
+  --card: oklch(19% 0 0);
+  --card-foreground: var(--foreground);
+
+  --primary: oklch(62.7% 0.194 149.214); /* Keep same vibrant green */
+  --primary-foreground: oklch(15% 0 0);
+
+  --secondary: oklch(22% 0 0);
+  --secondary-foreground: oklch(92% 0 0);
+  --muted: oklch(24% 0 0);
+  --muted-foreground: oklch(70% 0 0);
+
+  --border: oklch(100% 0 0 / 0.15);
+  --input: oklch(100% 0 0 / 0.2);
+  --ring: var(--primary);
+
+  --bitcoin: oklch(78% 0.22 70); /* Slightly brighter in dark */
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -128,4 +128,21 @@ body {
 
 .app-container {
   @apply container mx-auto xl:px-16 px-5;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+.animate-float {
+  animation: float 12s ease-in-out infinite;
+}
+.animate-float-delayed {
+  animation: float 15s ease-in-out infinite;
+  animation-delay: -5s;
 }

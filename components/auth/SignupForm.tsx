@@ -12,8 +12,11 @@ import {
   FieldDescription,
   FieldGroup,
   FieldLabel,
+  FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import GoogleOauthBtn from "./GoogleOauthBtn";
 
 export function SignupForm({
   className,
@@ -23,7 +26,7 @@ export function SignupForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Create your account</CardTitle>
+          <CardTitle className="text-2xl">Create your account</CardTitle>
           <CardDescription>
             Enter your email below to create your account
           </CardDescription>
@@ -31,6 +34,10 @@ export function SignupForm({
         <CardContent>
           <form>
             <FieldGroup>
+              <GoogleOauthBtn />
+              <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
+                Or continue with
+              </FieldSeparator>
               <Field>
                 <FieldLabel htmlFor="name">Full Name</FieldLabel>
                 <Input id="name" type="text" placeholder="John Doe" required />
@@ -64,17 +71,13 @@ export function SignupForm({
               <Field>
                 <Button type="submit">Create Account</Button>
                 <FieldDescription className="text-center">
-                  Already have an account? <a href="#">Sign in</a>
+                  Already have an account? <Link href="/login">Sign in</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
           </form>
         </CardContent>
       </Card>
-      <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </FieldDescription>
     </div>
   );
 }

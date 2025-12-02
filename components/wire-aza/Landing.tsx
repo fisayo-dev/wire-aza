@@ -80,7 +80,7 @@ const Landing = () => {
           "animate-float-delay-3 opacity-90"
         )}
       >
-        <Bank/>
+        <Bank />
       </div>
 
       {/* ====================== MAIN CONTENT ====================== */}
