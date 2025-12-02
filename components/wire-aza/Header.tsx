@@ -1,11 +1,20 @@
 import { Headphones, LockIcon, Search, UserPlus } from "lucide-react";
+import Link from "next/link";
 
 const Header = () => {
   const headerLinks = [
-    { title: "Support", icon: <Headphones className="w-5 h-5" /> },
-    { title: "Find Aza", icon: <Search className="w-5 h-5" /> },
-    { title: "Signup", icon: <UserPlus className="w-5 h-5" /> },
-    { title: "Login", icon: <LockIcon className="w-5 h-5" /> },
+    {
+      title: "Support",
+      icon: <Headphones className="w-5 h-5" />,
+      to: "/support",
+    },
+    {
+      title: "Find Aza",
+      icon: <Search className="w-5 h-5" />,
+      to: "/find-aza",
+    },
+    { title: "Signup", icon: <UserPlus className="w-5 h-5" />, to: "/signup" },
+    { title: "Login", icon: <LockIcon className="w-5 h-5" />, to: "/login" },
   ];
   return (
     <div className="bg-background fixed w-full top-0 left-0 z-50">
@@ -13,13 +22,14 @@ const Header = () => {
         <h2 className="text-2xl font-bold">Wire Aza</h2>
         <div className="flex items-center gap-4 md:gap-6">
           {headerLinks.map((link, index) => (
-            <div
+            <Link
+              href={link.to}
               key={index}
               className="flex rounded-2xl transition-all cursor-pointer   hover:text-gray-600 items-center space-x-2 "
             >
               {link.icon}
               <span className="hidden md:block">{link.title}</span>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
