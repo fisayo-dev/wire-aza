@@ -1,9 +1,10 @@
-import { GiftIcon, LockIcon, Search } from "lucide-react";
+import { Headphones, LockIcon, Search, UserPlus } from "lucide-react";
 
 const Header = () => {
   const headerLinks = [
-    { title: "Support", icon: <GiftIcon className="w-5 h-5" /> },
+    { title: "Support", icon: <Headphones className="w-5 h-5" /> },
     { title: "Find Aza", icon: <Search className="w-5 h-5" /> },
+    { title: "Signup", icon: <UserPlus className="w-5 h-5" /> },
     { title: "Login", icon: <LockIcon className="w-5 h-5" /> },
   ];
   return (
@@ -17,9 +18,7 @@ const Header = () => {
               className="flex rounded-2xl transition-all cursor-pointer   hover:text-gray-600 items-center space-x-2 "
             >
               {link.icon}
-              <span className="hidden md:block">
-                {link.title}
-              </span>
+              <span className="hidden md:block">{link.title}</span>
             </div>
           ))}
         </div>
