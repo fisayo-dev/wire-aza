@@ -33,9 +33,8 @@ export default function RootLayout({
           position="bottom-right"
           toastOptions={{
             duration: 4000,
-            style: {
-              background: "#00A63D",
-              color: "#FEF3F7",
+            classNames: {
+              success: "bg-[#00A63D] text-[#FEF3F7]",
             },
           }}
         />

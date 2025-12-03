@@ -1,23 +1,25 @@
 import axios from "axios";
-import wireAzaEnv from "./env";
+import wireAzaEnv from "@/config/env";
 
-const wireAzaApi = axios.create({
+const api = axios.create({
   baseURL: wireAzaEnv.backendUrl,
-  withCredentials: true,
+  withCredentials: true, 
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-// api.interceptors.request.use((config) => {
-//   return config;
-// });
-
-wireAzaApi.interceptors.response.use(
-  (response) => response,
+// Optional: better error logging
+api.interceptors.response.use(
+  (res) => res,
   (error) => {
-    if (error.response?.status === 401) {
-      console.log("User is not authenticated");
-    }
+    console.error("Backend API Error:", {
+      status: error.response?.status,
+      data: error.response?.data,
+      url: error.config?.url,
+    });
     return Promise.reject(error);
   }
 );
 
-export default wireAzaApi;
+export default api;
