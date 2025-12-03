@@ -19,6 +19,9 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import GoogleOauthBtn from "./GoogleOauthBtn";
+import { loginUser } from "@/actions/auth";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
@@ -29,6 +32,8 @@ export function LoginForm({
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -47,11 +52,23 @@ export function LoginForm({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted", { email, password });
-      // Handle login logic here
+      setIsLoading(true);
+      const result = await loginUser({
+        email: email.trim(),
+        password,
+      });
+
+      setIsLoading(false);
+
+      if (result.success) {
+        toast.success(result.data.message || "Login Successful!");
+        router.push("/");
+      } else {
+        toast.error(result.error || "Something went wrong");
+      }
     }
   };
 
@@ -116,7 +133,9 @@ export function LoginForm({
                 )}
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Logging in..." : "Log In"}
+                </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account?{" "}
                   <Link href="/signup">Sign up</Link>
