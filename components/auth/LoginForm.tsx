@@ -26,7 +26,7 @@ export function LoginForm({
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Jump Right In</CardTitle>
-          <CardDescription>Your account number doesn&apos;t have appear basic.</CardDescription>
+          <CardDescription>Your account number doesn&apos;t have to appear basic.</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
