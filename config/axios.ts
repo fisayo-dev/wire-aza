@@ -3,7 +3,7 @@ import wireAzaEnv from "@/config/env";
 
 const api = axios.create({
   baseURL: wireAzaEnv.backendUrl,
-  withCredentials: true, 
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },

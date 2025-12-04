@@ -26,6 +26,7 @@ export async function loginUser(data: { email: string; password: string }) {
   try {
     const res = await api.post("/auth/login", data);
     console.log("Login response:", res.data);
+    console.log("Login response header:", res.headers);
     return { success: res.data.success, data: res.data };
   } catch (error: any) {
     const message =
