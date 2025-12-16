@@ -1,5 +1,9 @@
 "use server";
 
-import api from "@/config/axios";
+import { cookies } from "next/headers";
 
-
+export async function checkAuth() {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("wire-aza-session");
+  return !!sessionCookie;
+}

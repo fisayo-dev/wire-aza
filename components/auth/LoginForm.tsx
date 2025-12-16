@@ -72,7 +72,7 @@ export function LoginForm({
 
         if (response.data.success) {
           toast.success(response.data.message);
-          router.push("/");
+          router.push("/dashboard");
         } else {
           toast.error(response.data.message || "Something went wrong");
         }
