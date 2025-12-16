@@ -76,13 +76,8 @@ export function LoginForm({
         } else {
           toast.error(response.data.message || "Something went wrong");
         }
-      } catch (error: any) {
-        console.error("Login error:", error);
-        toast.error(
-          error.response?.data?.message ||
-            error.response?.data?.error ||
-            "Something went wrong"
-        );
+      } catch {
+        toast.error("Something went wrong");
       } finally {
         setIsLoading(false);
       }

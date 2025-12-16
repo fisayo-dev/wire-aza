@@ -22,13 +22,15 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import GoogleOauthBtn from "./GoogleOauthBtn";
 import { toast } from "sonner";
-import { signupUser } from "@/actions/auth";
+// import { signupUser } from "@/actions/auth";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export function SignupForm({
   className,
+  backendUrl,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & { backendUrl: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -64,19 +66,26 @@ export function SignupForm({
 
     setIsLoading(true);
 
-    const result = await signupUser({
-      name: name.trim(),
-      email: email.trim(),
-      password,
-    });
+    try {
+      axios.defaults.withCredentials = true;
+      const response = await axios.post(`${backendUrl}/auth/signup`, {
+        name: name.trim(),
+        email: email.trim(),
+        password,
+      });
 
-    setIsLoading(false);
+      console.log("Signup Result:", response.data);
 
-    if (result.success) {
-      toast.success("Account created successfully!");
-      router.push("/login"); // or /dashboard
-    } else {
-      toast.error(result.error || "Something went wrong");
+      if (response.data.success) {
+        toast.success(response.data.message || "Account created successfully!");
+        router.push("/login");
+      } else {
+        toast.error(response.data.message || "Something went wrong");
+      }
+    } catch  {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
     }
   };
 
