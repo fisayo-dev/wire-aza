@@ -82,8 +82,9 @@ export function SignupForm({
       } else {
         toast.error(response.data.message || "Something went wrong");
       }
-    } catch  {
-      toast.error("Something went wrong");
+    } catch (error) {
+      toast.error(`Something went wrong: ${error}`);
+      console.error("Signup error:",  error);
     } finally {
       setIsLoading(false);
     }
