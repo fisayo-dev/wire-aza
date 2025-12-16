@@ -19,14 +19,16 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import GoogleOauthBtn from "./GoogleOauthBtn";
-import { loginUser } from "@/actions/auth";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+// import api from "@/config/axios"; // Your axios instance
+import axios from "axios";
 
 export function LoginForm({
   className,
+  backendUrl,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & { backendUrl: string }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
@@ -56,22 +58,32 @@ export function LoginForm({
     e.preventDefault();
     if (validateForm()) {
       setIsLoading(true);
-      const result = await loginUser({
-        email: email.trim(),
-        password,
-      });
 
-      setIsLoading(false);
+      try {
+        // Direct API call from browser - cookie will be stored in browser
+        const response = await axios.post(`${backendUrl}/auth/login`, {
+          email: email.trim(),
+          password,
+        });
 
-      console.log("Login Result:", result);
-      if (result.success) {
-        console.log("Login data:", result.data);
-        console.log("Result message:", result.message);
+        console.log("Login Result:", response.data);
+        console.log("Login response headers:", response.headers);
 
-        toast.success(result.message);
-        router.push("/");
-      } else {
-        toast.error(result.error || "Something went wrong");
+        if (response.data.success) {
+          toast.success(response.data.message);
+          router.push("/");
+        } else {
+          toast.error(response.data.message || "Something went wrong");
+        }
+      } catch (error: any) {
+        console.error("Login error:", error);
+        toast.error(
+          error.response?.data?.message ||
+            error.response?.data?.error ||
+            "Something went wrong"
+        );
+      } finally {
+        setIsLoading(false);
       }
     }
   };
