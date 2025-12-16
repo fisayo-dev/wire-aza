@@ -60,6 +60,7 @@ export function LoginForm({
       setIsLoading(true);
 
       try {
+        axios.defaults.withCredentials = true;
         // Direct API call from browser - cookie will be stored in browser
         const response = await axios.post(`${backendUrl}/auth/login`, {
           email: email.trim(),
