@@ -63,8 +63,12 @@ export function LoginForm({
 
       setIsLoading(false);
 
+      console.log("Login Result:", result);
       if (result.success) {
-        toast.success(result.data.message || "Login Successful!");
+        console.log("Login data:", result.data);
+        console.log("Result message:", result.message);
+
+        toast.success(result.message);
         router.push("/");
       } else {
         toast.error(result.error || "Something went wrong");

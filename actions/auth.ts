@@ -25,9 +25,10 @@ export async function signupUser(data: {
 export async function loginUser(data: { email: string; password: string }) {
   try {
     const res = await api.post("/auth/login", data);
-    console.log("Login response:", res.data);
+    const resData = await res.data;
+    console.log("Login response:", resData);
     console.log("Login response header:", res.headers);
-    return { success: res.data.success, data: res.data };
+    return { success: resData.success, message: resData.message, data: resData };
   } catch (error: any) {
     const message =
       error.response?.data?.message ||
