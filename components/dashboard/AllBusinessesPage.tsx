@@ -58,7 +58,8 @@ const AllBusinessesPage = () => {
   ];
   return (
     <div className="py-4 lg:max-w-3xl md:max-w-2xl mx-auto">
-      <div className="grid grid-cols-1 gap-4">
+      <h2 className="text-3xl text-center">Explore All Business</h2>
+      <div className="grid grid-cols-1 gap-4 my-6">
         {/* Grid card */}
         {sampleBusinesses.map((business, index) => (
           <div
