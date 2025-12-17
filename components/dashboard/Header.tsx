@@ -1,6 +1,6 @@
 "use client";
 
-import { GiftIcon, PlusIcon, User } from "lucide-react";
+import { Building, GiftIcon, PlusIcon, User } from "lucide-react";
 import Link from "next/link";
 
 const DashboardHeader = () => {
@@ -17,11 +17,18 @@ const DashboardHeader = () => {
           </Link>
           <div className="flex items-center space-x-2">
             <Link
-              title="Create New Aza"
+              title="Create New Business"
               href="/create"
               className="p-2 hover:bg-green-100 rounded-full"
             >
               <PlusIcon />
+            </Link>
+            <Link
+              title="My Businesses."
+              href="/my-businesses"
+              className="p-2 hover:bg-green-100 rounded-full"
+            >
+              <Building />
             </Link>
             <Link
               title="Support wire aza"
