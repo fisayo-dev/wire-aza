@@ -112,7 +112,7 @@ const AllBusinessesPage = () => {
                 </div>
               </div>
               <Link
-                href={`/business/${business.id}`}
+                href={`/businesses/${business.id}`}
                 className="text-sm hover:underline"
               >
                 See more about{" "}
