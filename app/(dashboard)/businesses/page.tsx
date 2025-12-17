@@ -1,7 +1,6 @@
-import React from "react";
-
-const page = () => {
-  return <div>All businesss page</div>;
+import AllBusinessesPage from "@/components/dashboard/AllBusinessesPage";
+const BusinessesPage = () => {
+  return <AllBusinessesPage />;
 };
 
-export default page;
+export default BusinessesPage;
