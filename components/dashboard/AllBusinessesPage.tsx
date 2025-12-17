@@ -66,22 +66,32 @@ const AllBusinessesPage = () => {
             className="p-4 rounded-2xl overflow-hidden border bg-white shadow-md"
           >
             <div className="grid gap-2">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Image
+                    alt={business.name}
+                    height={40}
+                    width={40}
+                    src="/assets/google.svg"
+                  />
+                  <div className="flex flex-col">
+                    <h2 className="text-xl font-bold">{business.name}</h2>
+                    <p className="text-sm">
+                      {business.description.length > 30
+                        ? `${business.description.substring(0, 27)}...`
+                        : business.description}
+                    </p>
+                  </div>
+                </div>
                 <Image
-                  alt={business.name}
-                  height={40}
-                  width={40}
+                  alt={business.owner.name}
+                  height={20}
+                  width={20}
+                  title={business.owner.name}
                   src="/assets/google.svg"
                 />
-                <div className="flex flex-col">
-                  <h2 className="text-xl font-bold">{business.name}</h2>
-                  <p className="text-sm">
-                    {business.description.length > 30
-                      ? `${business.description.substring(0, 27)}...`
-                      : business.description}
-                  </p>
-                </div>
               </div>
+
               <div className="border rounded-2xl overflow-hidden p-4">
                 <div className="grid gap-2 my-2">
                   {business.azas.map((aza, index) => (
