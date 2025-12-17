@@ -14,7 +14,7 @@ export function proxy(request: NextRequest) {
     "/support",
     "/error",
   ];
-  const privateRoutes = ["/businesses", "/profile"];
+  const privateRoutes = ["/businesses", "/profile", "/create"];
 
   const isPublicRoute = publicRoutes.includes(path);
   const isPrivateRoutes = privateRoutes.includes(path);
