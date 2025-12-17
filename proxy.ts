@@ -29,7 +29,7 @@ export function proxy(request: NextRequest) {
 
   // 2. Check if user is aunthenticated user is trying to view public routes
   if (isAuthenticated && isPublicRoute) {
-    return NextResponse.redirect(new URL("/home", request.url));
+    return NextResponse.redirect(new URL("/businesses", request.url));
   }
 
   return NextResponse.next();
