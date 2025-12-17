@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import GoogleOauthBtn from "./GoogleOauthBtn";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 // import api from "@/config/axios"; // Your axios instance
 import axios from "axios";
 
@@ -36,6 +36,8 @@ export function LoginForm({
   );
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callback = searchParams.get("callback");
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -71,8 +73,12 @@ export function LoginForm({
         console.log("Login response headers:", response.headers);
 
         if (response.data.success) {
+          const redirectPath =
+            callback && callback.startsWith("/")
+              ? decodeURIComponent(callback)
+              : "/businesses";
           toast.success(response.data.message);
-          router.push("/dashboard");
+          router.push(redirectPath);
         } else {
           toast.error(response.data.message || "Something went wrong");
         }

@@ -1,25 +1,43 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 
 export function proxy(request: NextRequest) {
   const sessionCookie = request.cookies.get("wire-aza-session");
+  const path = request.nextUrl.pathname;
   const isAuthenticated = !!sessionCookie;
 
-  const { pathname } = request.nextUrl;
+  const publicRoutes = [
+    "/login",
+    "/signup",
+    "/forgot-password",
+    "/",
+    "/support",
+    "/error",
+  ];
+  const privateRoutes = ["/businesses", "/profile"];
 
-  // If authenticated, redirect away from auth pages and root
-  if (isAuthenticated) {
-    if (pathname === "/" || pathname === "/login" || pathname === "/signup") {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
+  const isPublicRoute = publicRoutes.includes(path);
+  const isPrivateRoutes = privateRoutes.includes(path);
+
+  // 1. Redirect unauthenticated users from privates routes
+  if (!isAuthenticated && isPrivateRoutes) {
+    const callbackUrl = encodeURIComponent(path);
+    return NextResponse.redirect(
+      new URL(`/login?callback=${callbackUrl}`, request.url)
+    );
   }
 
-  // If not authenticated, allow access to auth pages and root
-  // You can add more logic here if needed, e.g., redirect to login if accessing protected routes
+  // 2. Check if user is aunthenticated user is trying to view public routes
+  if (isAuthenticated && isPublicRoute) {
+    return NextResponse.redirect(new URL("/home", request.url));
+  }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/login", "/signup", "/dashboard"],
+  matcher: [
+    // Match all paths except API routes and Next.js internal files
+    "/((?!api|_next/static|_next/image).*)",
+  ],
 };
