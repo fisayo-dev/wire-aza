@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 const AllBusinessesPage = () => {
@@ -30,7 +29,7 @@ const AllBusinessesPage = () => {
       ],
     },
     {
-      id: 1,
+      id: 2,
       name: "Piggyvest",
       description:
         "Lorem ispum dor lo sit amet! Lorem ispum dor lo sit amet!Lorem ispum dor lo sit amet!",
@@ -56,89 +55,131 @@ const AllBusinessesPage = () => {
       ],
     },
   ];
+
   return (
-    <div className="py-4 px-4 sm:px-6 lg:px-8 xl:px-12 lg:max-w-5xl md:max-w-4xl sm:max-w-3xl mx-auto">
-      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-gray-900 mb-6 sm:mb-8">
-        Explore All Businesses
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-        {/* Grid card */}
-        {sampleBusinesses.map((business, index) => (
-          <div
-            key={index}
-            className="p-4 sm:p-6 rounded-2xl overflow-hidden border bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
-          >
-            <div className="grid gap-3 sm:gap-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <Image
-                    alt={business.name}
-                    height={40}
-                    width={40}
-                    src="/assets/google.svg"
-                    className="rounded-full w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12"
-                  />
-                  <div className="flex flex-col min-w-0 flex-1">
-                    <h2 className="text-lg sm:text-xl font-bold text-gray-900 truncate">
-                      {business.name}
-                    </h2>
-                    <p className="text-xs sm:text-sm text-gray-600 line-clamp-2">
-                      {business.description.length > 60
-                        ? `${business.description.substring(0, 57)}...`
-                        : business.description}
-                    </p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className=" border-b border-gray-200">
+        <div className="py-8 px-4 sm:px-6 lg:px-8 xl:px-12 max-w-7xl mx-auto text-center">
+          <p className="text-sm sm:text-base text-gray-600 mb-4">
+            Discover businesses making a difference
+          </p>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            Explore All{" "}
+            <span className="relative">
+              Businesses
+              <span className="absolute bottom-2 left-0 w-full h-1 bg-green-500"></span>
+            </span>
+          </h1>
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+            Connect with businesses and access their account details seamlessly
+            and professionally.
+          </p>
+        </div>
+      </div>
+
+      {/* Businesses Grid */}
+      <div className="py-12 px-4 sm:px-6 lg:px-8 xl:px-12 :max-w-5xl xl:max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
+          {sampleBusinesses.map((business, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-3xl overflow-hidden border border-gray-200 hover:border-green-500 transition-all duration-300 group"
+            >
+              {/* Card Header */}
+              <div className="p-6 border-b border-gray-100">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center space-x-3 flex-1 min-w-0">
+                    <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-green-400 to-green-600 flex items-center justify-center shrink-0 shadow-lg">
+                      <span className="text-white text-xl font-bold">
+                        {business.name.charAt(0)}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h2 className="text-xl font-bold text-gray-900 truncate group-hover:text-green-600 transition-colors">
+                        {business.name}
+                      </h2>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Financial Services
+                      </p>
+                    </div>
+                  </div>
+                  <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0 ml-3">
+                    <span className="text-gray-600 text-xs font-semibold">
+                      {business.owner.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </span>
                   </div>
                 </div>
-                <Image
-                  alt={business.owner.name}
-                  height={28}
-                  width={28}
-                  title={business.owner.name}
-                  src="/assets/google.svg"
-                  className="rounded-full w-7 h-7 sm:w-8 sm:h-8 shrink-0"
-                />
+                <p className="text-sm text-gray-600 line-clamp-2">
+                  {business.description}
+                </p>
               </div>
 
-              <div className="border rounded-2xl overflow-hidden p-3 sm:p-4 bg-gray-50">
-                <div className="grid gap-2 sm:gap-3">
-                  {business.azas.map((aza, index) => (
+              {/* Account Details Section */}
+              <div className="p-6 bg-gray-50">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4">
+                  Account Details
+                </h3>
+                <div className="space-y-3">
+                  {business.azas.map((aza, azaIndex) => (
                     <div
-                      key={index}
-                      className="flex items-center space-x-2 sm:space-x-3"
+                      key={azaIndex}
+                      className="bg-white rounded-xl p-4 border border-gray-200 hover:border-green-500 transition-all duration-200"
                     >
-                      <Image
-                        alt={aza.account_name}
-                        height={32}
-                        width={32}
-                        src="/assets/google.svg"
-                        className="rounded-full w-6 h-6 sm:w-8 sm:h-8 shrink-0"
-                      />
-                      <div className="flex flex-col min-w-0 flex-1">
-                        <h2 className="text-xs sm:text-sm font-semibold text-gray-900 truncate">
-                          {aza.account_name}
-                        </h2>
-                        <p className="text-xs text-gray-600">
-                          {aza.account_number}
-                        </p>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-lg bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center shrink-0">
+                          <span className="text-white text-xs font-bold">
+                            {aza.bank_name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-gray-900 truncate">
+                            {aza.account_name}
+                          </p>
+                          <p className="text-xs text-gray-600 font-mono mt-1">
+                            {aza.account_number}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-0.5">
+                            {aza.bank_name}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-              <Link
-                href={`/businesses/${business.id}`}
-                className="text-xs sm:text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
-              >
-                See more about{" "}
-                <strong className="truncate block">
-                  {business.name.length > 25
-                    ? `${business.name.substring(0, 22)}...`
-                    : business.name}
-                </strong>
-              </Link>
+
+              {/* Card Footer */}
+              <div className="p-6 bg-white border-t border-gray-100">
+                <Link
+                  href={`/businesses/${business.id}`}
+                  className="flex items-center justify-center w-full py-3 px-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-all duration-200 group-hover:shadow-lg"
+                >
+                  View Details
+                  <svg
+                    className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </Link>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
