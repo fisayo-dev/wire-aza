@@ -19,7 +19,13 @@ const Header = () => {
   return (
     <div className="bg-background fixed w-full top-0 left-0 z-50">
       <div className="app-container flex justify-between items-center h-20">
-        <h2 className="text-2xl font-bold">Wire Aza</h2>
+        <Link
+          href="/businesses"
+          title="Wire Aza"
+          className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900"
+        >
+          Wire Aza
+        </Link>
         <div className="flex items-center gap-4 md:gap-6">
           {headerLinks.map((link, index) => (
             <Link
