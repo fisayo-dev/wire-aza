@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -39,6 +40,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { create } from "domain";
+import { createBusiness } from "@/actions/business";
 
 // Business types
 const businessTypes = [
@@ -239,21 +242,34 @@ export default function CreateBusinessPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setSubmitError("");
     if (!validateForm()) {
       setSubmitError("Please fix all errors before submitting");
       return;
     }
 
-    console.log("Submitted Data:", {
-      businessName,
-      businessUsername,
-      businessType,
-      businessDescription,
-      profileImage,
-      bankAccounts,
-    });
+    // Submit logic
+    const payload = {
+      name: businessName,
+      username: businessUsername.trim(),
+      description: businessDescription,
+      type: businessType,
+      logo: imagePreview,
+      accounts: bankAccounts.map((account) => ({
+        bank_name: account.bankName,
+        bank_code: account.bankCode,
+        account_number: account.accountNumber,
+        account_name: account.accountName,
+      })),
+    };
+
+    const res = await createBusiness(payload);
+    if (res.success) {
+      console.log("Business created:", res.data);
+    } else {
+      setSubmitError(res.error || "Failed to create business");
+    }  
   };
 
   return (
@@ -401,7 +417,9 @@ export default function CreateBusinessPage() {
                     setErrors((prev) => ({ ...prev, businessDescription: "" }));
                   }}
                   rows={4}
-                  className={`${errors.businessDescription ? "border-red-500" : ""} resize-none h-30`}
+                  className={`${
+                    errors.businessDescription ? "border-red-500" : ""
+                  } resize-none h-30`}
                 />
                 {errors.businessDescription && (
                   <p className="text-sm text-red-500 mt-1">
@@ -419,9 +437,11 @@ export default function CreateBusinessPage() {
                 <div className="mt-1.5">
                   {imagePreview ? (
                     <div className="relative">
-                      <img
+                      <Image
                         src={imagePreview}
                         alt="Preview"
+                        width={500}
+                        height={192}
                         className="w-full h-48 object-cover rounded-lg border-2 border-gray-300"
                       />
                       <button
