@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,11 +24,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 // import api from "@/config/axios"; // Your axios instance
 import axios from "axios";
 
-export function LoginForm({
-  className,
-  backendUrl,
-  ...props
-}: React.ComponentProps<"div"> & { backendUrl: string }) {
+function LoginFormContent({ backendUrl }: { backendUrl: string }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
@@ -91,7 +87,7 @@ export function LoginForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("flex flex-col gap-6")}>
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Jump Right In</CardTitle>
@@ -164,5 +160,21 @@ export function LoginForm({
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export function LoginForm({
+  backendUrl,
+}: React.ComponentProps<"div"> & { backendUrl: string }) {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center min-h-screen">
+          Loading...
+        </div>
+      }
+    >
+      <LoginFormContent backendUrl={backendUrl} />
+    </Suspense>
   );
 }
