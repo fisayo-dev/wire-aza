@@ -40,9 +40,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { create } from "domain";
 import { createBusiness } from "@/actions/business";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 // Business types
 const businessTypes = [
@@ -111,6 +111,7 @@ export default function CreateBusinessPage() {
   const [openBusinessType, setOpenBusinessType] = useState(false);
   const [openBankPopovers, setOpenBankPopovers] = useState<boolean[]>([false]);
 
+  const router = useRouter();
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -247,6 +248,7 @@ export default function CreateBusinessPage() {
     setSubmitError("");
     if (!validateForm()) {
       setSubmitError("Please fix all errors before submitting");
+      window.scrollTo(0, 0);
       return;
     }
 
@@ -267,11 +269,13 @@ export default function CreateBusinessPage() {
 
     const res = await createBusiness(payload);
     if (res.success) {
-      console.log("Business created:", res.data);
+      // console.log("Business created:", res.data);
+      router.push("/businesses");
     } else {
       setSubmitError(res.error || "Failed to create business");
       toast.error(res.error || "Failed to create business");
-    }  
+      window.scrollTo(0, 0);
+    }
   };
 
   return (
