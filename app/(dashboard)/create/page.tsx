@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Card,
   CardContent,
@@ -30,6 +31,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import {
   Popover,
@@ -62,7 +64,7 @@ const businessTypes = [
   "Other",
 ];
 
-// Nigerian banks
+// Nigerian banks list
 const nigerianBanks = [
   { name: "Access Bank", code: "044" },
   { name: "Guaranty Trust Bank (GTBank)", code: "058" },
@@ -103,9 +105,7 @@ export default function CreateBusinessPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [submitError, setSubmitError] = useState("");
   const [openBusinessType, setOpenBusinessType] = useState(false);
-  const [openBankSelectors, setOpenBankSelectors] = useState<boolean[]>([
-    false,
-  ]);
+  const [openBankPopovers, setOpenBankPopovers] = useState<boolean[]>([false]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -150,16 +150,13 @@ export default function CreateBusinessPage() {
         ...bankAccounts,
         { bankName: "", bankCode: "", accountName: "", accountNumber: "" },
       ]);
-      setOpenBankSelectors([...openBankSelectors, false]);
+      setOpenBankPopovers([...openBankPopovers, false]);
     }
   };
 
   const removeBankAccount = (index: number) => {
-    const newAccounts = bankAccounts.filter((_, i) => i !== index);
-    setBankAccounts(newAccounts);
-    const newOpenSelectors = openBankSelectors.filter((_, i) => i !== index);
-    setOpenBankSelectors(newOpenSelectors);
-    // Clear related errors
+    setBankAccounts(bankAccounts.filter((_, i) => i !== index));
+    setOpenBankPopovers(openBankPopovers.filter((_, i) => i !== index));
     setErrors((prev) => {
       const newErrors = { ...prev };
       delete newErrors[`bankAccount${index}`];
@@ -167,15 +164,34 @@ export default function CreateBusinessPage() {
     });
   };
 
-  const updateBankAccount = (
+  const selectBank = (index: number, bank: { name: string; code: string }) => {
+    const newAccounts = [...bankAccounts];
+    newAccounts[index] = {
+      ...newAccounts[index],
+      bankName: bank.name,
+      bankCode: bank.code,
+    };
+    setBankAccounts(newAccounts);
+
+    // Close the popover
+    const newOpen = [...openBankPopovers];
+    newOpen[index] = false;
+    setOpenBankPopovers(newOpen);
+
+    // Clear error
+    setErrors((prev) => ({ ...prev, [`bankAccount${index}`]: "" }));
+  };
+
+  const updateAccountField = (
     index: number,
-    field: keyof BankAccount,
+    field: "accountName" | "accountNumber",
     value: string
-  ): void => {
+  ) => {
     const newAccounts = [...bankAccounts];
     newAccounts[index] = { ...newAccounts[index], [field]: value };
     setBankAccounts(newAccounts);
-    // Clear error for this field
+
+    // Clear error when typing
     if (errors[`bankAccount${index}`]) {
       setErrors((prev) => ({ ...prev, [`bankAccount${index}`]: "" }));
     }
@@ -184,37 +200,29 @@ export default function CreateBusinessPage() {
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
-    if (!businessName.trim()) {
+    if (!businessName.trim())
       newErrors.businessName = "Business name is required";
-    } else if (businessName.trim().length < 2) {
+    else if (businessName.trim().length < 2)
       newErrors.businessName = "Business name must be at least 2 characters";
-    }
 
-    if (!businessUsername.trim()) {
+    if (!businessUsername.trim())
       newErrors.businessUsername = "Business username is required";
-    } else if (businessUsername.trim().length < 3) {
+    else if (businessUsername.trim().length < 3)
       newErrors.businessUsername = "Username must be at least 3 characters";
-    } else if (!/^[a-zA-Z0-9_]+$/.test(businessUsername)) {
+    else if (!/^[a-zA-Z0-9_]+$/.test(businessUsername))
       newErrors.businessUsername =
         "Username can only contain letters, numbers, and underscores";
-    }
 
-    if (!businessType) {
-      newErrors.businessType = "Business type is required";
-    }
+    if (!businessType) newErrors.businessType = "Business type is required";
 
-    if (!businessDescription.trim()) {
+    if (!businessDescription.trim())
       newErrors.businessDescription = "Business description is required";
-    } else if (businessDescription.trim().length < 10) {
+    else if (businessDescription.trim().length < 10)
       newErrors.businessDescription =
         "Description must be at least 10 characters";
-    }
 
-    if (!profileImage) {
-      newErrors.profileImage = "Profile image is required";
-    }
+    if (!profileImage) newErrors.profileImage = "Profile image is required";
 
-    // Validate bank accounts
     bankAccounts.forEach((account, index) => {
       if (!account.bankName) {
         newErrors[`bankAccount${index}`] = "Please select a bank";
@@ -233,13 +241,12 @@ export default function CreateBusinessPage() {
 
   const handleSubmit = () => {
     setSubmitError("");
-
     if (!validateForm()) {
       setSubmitError("Please fix all errors before submitting");
       return;
     }
 
-    console.log({
+    console.log("Submitted Data:", {
       businessName,
       businessUsername,
       businessType,
@@ -273,27 +280,18 @@ export default function CreateBusinessPage() {
             <FieldGroup className="space-y-6">
               {/* Business Name */}
               <Field>
-                <FieldLabel
-                  htmlFor="businessName"
-                  className="flex items-center gap-2 text-sm font-medium"
-                >
+                <FieldLabel className="flex items-center gap-2 text-sm font-medium">
                   <Building2 className="w-4 h-4" />
                   Business Name <span className="text-red-500">*</span>
                 </FieldLabel>
                 <Input
-                  id="businessName"
-                  type="text"
                   placeholder="Enter your business name"
                   value={businessName}
                   onChange={(e) => {
                     setBusinessName(e.target.value);
-                    if (errors.businessName) {
-                      setErrors((prev) => ({ ...prev, businessName: "" }));
-                    }
+                    setErrors((prev) => ({ ...prev, businessName: "" }));
                   }}
-                  className={`mt-1.5 ${
-                    errors.businessName ? "border-red-500" : ""
-                  }`}
+                  className={errors.businessName ? "border-red-500" : ""}
                 />
                 {errors.businessName && (
                   <p className="text-sm text-red-500 mt-1">
@@ -304,27 +302,18 @@ export default function CreateBusinessPage() {
 
               {/* Business Username */}
               <Field>
-                <FieldLabel
-                  htmlFor="businessUsername"
-                  className="flex items-center gap-2 text-sm font-medium"
-                >
+                <FieldLabel className="flex items-center gap-2 text-sm font-medium">
                   <User className="w-4 h-4" />
                   Business Username <span className="text-red-500">*</span>
                 </FieldLabel>
                 <Input
-                  id="businessUsername"
-                  type="text"
                   placeholder="Choose a unique username"
                   value={businessUsername}
                   onChange={(e) => {
                     setBusinessUsername(e.target.value);
-                    if (errors.businessUsername) {
-                      setErrors((prev) => ({ ...prev, businessUsername: "" }));
-                    }
+                    setErrors((prev) => ({ ...prev, businessUsername: "" }));
                   }}
-                  className={`mt-1.5 ${
-                    errors.businessUsername ? "border-red-500" : ""
-                  }`}
+                  className={errors.businessUsername ? "border-red-500" : ""}
                 />
                 {errors.businessUsername && (
                   <p className="text-sm text-red-500 mt-1">
@@ -347,8 +336,7 @@ export default function CreateBusinessPage() {
                     <Button
                       variant="outline"
                       role="combobox"
-                      aria-expanded={openBusinessType}
-                      className={`w-full justify-between mt-1.5 ${
+                      className={`w-full justify-between ${
                         errors.businessType ? "border-red-500" : ""
                       }`}
                     >
@@ -359,38 +347,36 @@ export default function CreateBusinessPage() {
                   <PopoverContent className="w-full p-0">
                     <Command>
                       <CommandInput placeholder="Search business type..." />
-                      <CommandEmpty>No business type found.</CommandEmpty>
-                      <CommandGroup className="max-h-64 overflow-auto">
-                        {businessTypes.map((type) => (
-                          <CommandItem
-                            key={type}
-                            value={type}
-                            onSelect={(currentValue) => {
-                              setBusinessType(
-                                currentValue === businessType
-                                  ? ""
-                                  : currentValue
-                              );
-                              setOpenBusinessType(false);
-                              if (errors.businessType) {
+                      <CommandEmpty>No type found.</CommandEmpty>
+                      <CommandList>
+                        <CommandGroup className="max-h-64 overflow-auto">
+                          {businessTypes.map((type) => (
+                            <CommandItem
+                              key={type}
+                              value={type}
+                              onSelect={() => {
+                                setBusinessType(
+                                  type === businessType ? "" : type
+                                );
+                                setOpenBusinessType(false);
                                 setErrors((prev) => ({
                                   ...prev,
                                   businessType: "",
                                 }));
-                              }
-                            }}
-                          >
-                            <Check
-                              className={`mr-2 h-4 w-4 ${
-                                businessType === type
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              }`}
-                            />
-                            {type}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
+                              }}
+                            >
+                              <Check
+                                className={`mr-2 h-4 w-4 ${
+                                  businessType === type
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                }`}
+                              />
+                              {type}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
                     </Command>
                   </PopoverContent>
                 </Popover>
@@ -403,30 +389,19 @@ export default function CreateBusinessPage() {
 
               {/* Business Description */}
               <Field>
-                <FieldLabel
-                  htmlFor="businessDescription"
-                  className="flex items-center gap-2 text-sm font-medium"
-                >
+                <FieldLabel className="flex items-center gap-2 text-sm font-medium">
                   <FileText className="w-4 h-4" />
                   Business Description <span className="text-red-500">*</span>
                 </FieldLabel>
                 <Textarea
-                  id="businessDescription"
                   placeholder="Describe your business..."
                   value={businessDescription}
                   onChange={(e) => {
                     setBusinessDescription(e.target.value);
-                    if (errors.businessDescription) {
-                      setErrors((prev) => ({
-                        ...prev,
-                        businessDescription: "",
-                      }));
-                    }
+                    setErrors((prev) => ({ ...prev, businessDescription: "" }));
                   }}
-                  className={`resize-none mt-1.5 ${
-                    errors.businessDescription ? "border-red-500" : ""
-                  }`}
                   rows={4}
+                  className={`${errors.businessDescription ? "border-red-500" : ""} resize-none h-30`}
                 />
                 {errors.businessDescription && (
                   <p className="text-sm text-red-500 mt-1">
@@ -437,10 +412,7 @@ export default function CreateBusinessPage() {
 
               {/* Profile Image */}
               <Field>
-                <FieldLabel
-                  htmlFor="profileImage"
-                  className="flex items-center gap-2 text-sm font-medium"
-                >
+                <FieldLabel className="flex items-center gap-2 text-sm font-medium">
                   <Upload className="w-4 h-4" />
                   Business Profile Image <span className="text-red-500">*</span>
                 </FieldLabel>
@@ -454,7 +426,7 @@ export default function CreateBusinessPage() {
                       />
                       <button
                         onClick={removeImage}
-                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors"
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600"
                         type="button"
                       >
                         <X className="w-4 h-4" />
@@ -466,7 +438,7 @@ export default function CreateBusinessPage() {
                   ) : (
                     <label
                       htmlFor="profileImage"
-                      className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors ${
+                      className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 ${
                         errors.profileImage
                           ? "border-red-500"
                           : "border-gray-300"
@@ -485,9 +457,9 @@ export default function CreateBusinessPage() {
                       <input
                         id="profileImage"
                         type="file"
-                        className="hidden"
                         accept="image/*"
                         onChange={handleImageChange}
+                        className="hidden"
                       />
                     </label>
                   )}
@@ -508,7 +480,6 @@ export default function CreateBusinessPage() {
                   </FieldLabel>
                   {bankAccounts.length < 2 && (
                     <Button
-                      type="button"
                       variant="outline"
                       size="sm"
                       onClick={addBankAccount}
@@ -525,13 +496,12 @@ export default function CreateBusinessPage() {
                     key={index}
                     className="p-4 border rounded-lg bg-white space-y-4"
                   >
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold text-gray-700">
                         Account {index + 1}
                       </span>
                       {bankAccounts.length > 1 && (
                         <Button
-                          type="button"
                           variant="ghost"
                           size="sm"
                           onClick={() => removeBankAccount(index)}
@@ -542,26 +512,32 @@ export default function CreateBusinessPage() {
                       )}
                     </div>
 
-                    {/* Bank Name Selector */}
+                    {/* Bank Selector - FULLY FIXED */}
                     <div>
                       <label className="text-xs font-medium text-gray-700 mb-1.5 block">
                         Bank Name <span className="text-red-500">*</span>
                       </label>
                       <Popover
-                        open={openBankSelectors[index]}
+                        open={openBankPopovers[index]}
                         onOpenChange={(open) => {
-                          const newOpenSelectors = [...openBankSelectors];
-                          newOpenSelectors[index] = open;
-                          setOpenBankSelectors(newOpenSelectors);
+                          const newOpen = [...openBankPopovers];
+                          newOpen[index] = open;
+                          setOpenBankPopovers(newOpen);
                         }}
                       >
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
                             role="combobox"
-                            className="w-full justify-between"
+                            className={`w-full justify-between ${
+                              errors[`bankAccount${index}`]
+                                ? "border-red-500"
+                                : ""
+                            }`}
                           >
-                            {account.bankName || "Select bank..."}
+                            <span className="truncate text-left">
+                              {account.bankName || "Select bank..."}
+                            </span>
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </PopoverTrigger>
@@ -569,40 +545,26 @@ export default function CreateBusinessPage() {
                           <Command>
                             <CommandInput placeholder="Search bank..." />
                             <CommandEmpty>No bank found.</CommandEmpty>
-                            <CommandGroup className="max-h-64 overflow-auto">
-                              {nigerianBanks.map((bank) => (
-                                <CommandItem
-                                  key={bank.code}
-                                  value={bank.name}
-                                  onSelect={() => {
-                                    updateBankAccount(
-                                      index,
-                                      "bankName",
-                                      bank.name
-                                    );
-                                    updateBankAccount(
-                                      index,
-                                      "bankCode",
-                                      bank.code
-                                    );
-                                    const newOpenSelectors = [
-                                      ...openBankSelectors,
-                                    ];
-                                    newOpenSelectors[index] = false;
-                                    setOpenBankSelectors(newOpenSelectors);
-                                  }}
-                                >
-                                  <Check
-                                    className={`mr-2 h-4 w-4 ${
-                                      account.bankName === bank.name
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    }`}
-                                  />
-                                  {bank.name}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
+                            <CommandList>
+                              <CommandGroup className="max-h-64 overflow-auto">
+                                {nigerianBanks.map((bank) => (
+                                  <CommandItem
+                                    key={bank.code}
+                                    value={bank.name}
+                                    onSelect={() => selectBank(index, bank)}
+                                  >
+                                    <Check
+                                      className={`mr-2 h-4 w-4 ${
+                                        account.bankName === bank.name
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      }`}
+                                    />
+                                    {bank.name}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
                           </Command>
                         </PopoverContent>
                       </Popover>
@@ -614,11 +576,10 @@ export default function CreateBusinessPage() {
                         Account Name <span className="text-red-500">*</span>
                       </label>
                       <Input
-                        type="text"
                         placeholder="Enter account name"
                         value={account.accountName}
                         onChange={(e) =>
-                          updateBankAccount(
+                          updateAccountField(
                             index,
                             "accountName",
                             e.target.value
@@ -633,21 +594,20 @@ export default function CreateBusinessPage() {
                         Account Number <span className="text-red-500">*</span>
                       </label>
                       <Input
-                        type="text"
                         placeholder="Enter 10-digit account number"
                         value={account.accountNumber}
                         onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, "");
-                          if (value.length <= 10) {
-                            updateBankAccount(index, "accountNumber", value);
-                          }
+                          const value = e.target.value
+                            .replace(/\D/g, "")
+                            .slice(0, 10);
+                          updateAccountField(index, "accountNumber", value);
                         }}
                         maxLength={10}
                       />
                     </div>
 
                     {errors[`bankAccount${index}`] && (
-                      <p className="text-sm text-red-500">
+                      <p className="text-sm text-red-500 -mt-2">
                         {errors[`bankAccount${index}`]}
                       </p>
                     )}
@@ -660,7 +620,7 @@ export default function CreateBusinessPage() {
               </div>
             </FieldGroup>
 
-            <Button onClick={handleSubmit} className="w-full mt-6" size="lg">
+            <Button onClick={handleSubmit} className="w-full mt-8" size="lg">
               Create Business
             </Button>
           </div>
