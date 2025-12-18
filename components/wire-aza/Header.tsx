@@ -20,7 +20,7 @@ const Header = () => {
     <div className="bg-background fixed w-full top-0 left-0 z-50">
       <div className="app-container flex justify-between items-center h-20">
         <Link
-          href="/businesses"
+          href="/"
           title="Wire Aza"
           className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900"
         >

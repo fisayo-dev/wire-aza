@@ -111,21 +111,21 @@ export default function CreateBusinessPage() {
       return;
     }
 
-    // Handle form submission here
-    console.log({
-      businessName,
-      businessUsername,
-      businessDescription,
-      profileImage,
-    });
+    // // Handle form submission here
+    // console.log({
+    //   businessName,
+    //   businessUsername,
+    //   businessDescription,
+    //   profileImage,
+    // });
 
-    // Success handling would go here
-    alert("Business created successfully!");
+    // // Success handling would go here
+    // alert("Business created successfully!");
   };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <Card className="max-w-2xl mx-auto">
+      <Card className="max-w-xl mx-auto">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold text-gray-900">
             Create Your Business
