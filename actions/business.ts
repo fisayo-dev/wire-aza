@@ -17,19 +17,6 @@ export const createBusiness = async (payload: {
     const data = response.data;
     return { success: true, data };
   } catch (error: unknown) {
-    let errorMessage = "An error occurred";
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    } else if (
-      typeof error === "object" &&
-      error !== null &&
-      "response" in error
-    ) {
-      const axiosError = error as {
-        response?: { data?: { message?: string } };
-      };
-      errorMessage = axiosError.response?.data?.message || "An error occurred";
-    }
-    return { success: false, error: errorMessage };
+    return { success: false, error: error instanceof Error ? error.response.data.message : String(error)};
   }
 };

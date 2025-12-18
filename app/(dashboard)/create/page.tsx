@@ -42,6 +42,7 @@ import {
 import { Check, ChevronsUpDown } from "lucide-react";
 import { create } from "domain";
 import { createBusiness } from "@/actions/business";
+import { toast } from "sonner";
 
 // Business types
 const businessTypes = [
@@ -269,6 +270,7 @@ export default function CreateBusinessPage() {
       console.log("Business created:", res.data);
     } else {
       setSubmitError(res.error || "Failed to create business");
+      toast.error(res.error || "Failed to create business");
     }  
   };
 
