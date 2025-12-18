@@ -17,6 +17,25 @@ export const createBusiness = async (payload: {
     const data = response.data;
     return { success: true, data };
   } catch (error: unknown) {
-    return { success: false, error: error instanceof Error ? error.response.data.message : String(error)};
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.response.data.message : String(error),
+    };
+  }
+};
+
+export const getAllOrganizations = async () => {
+  try {
+    const response = await axios.get("/organizations");
+    const data = response.data;
+    return { success: true, data };
+  } catch (error: any) {
+    const errorMessage =
+      error?.response?.data?.message || error?.message || String(error);
+    return {
+      success: false,
+      error: errorMessage,
+    };
   }
 };

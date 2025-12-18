@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const AllBusinessesPage = () => {
+const AllBusinessesPage = ({ businesses }) => {
   const sampleBusinesses = [
     {
       id: 1,
@@ -55,6 +55,8 @@ const AllBusinessesPage = () => {
       ],
     },
   ];
+
+  console.log("Businesses Data:", businesses);
 
   return (
     <div className="min-h-screen bg-gray-50">

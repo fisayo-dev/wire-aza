@@ -6,34 +6,34 @@ export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isAuthenticated = !!sessionCookie;
 
-  const publicRoutes = [
-    "/login",
-    "/signup",
-    "/forgot-password",
-    "/",
-    "/support",
-    "/error",
-  ];
-  const privateRoutes = [
-    "/businesses",
-    "/profile",
-    "/create",
-    "/my-businesses",
-  ];
+  // Helper function to check if path starts with any protected route
+  const isProtectedRoute = (pathname: string): boolean => {
+    const protectedPrefixes = [
+      "/businesses",
+      "/profile",
+      "/create",
+      "/my-businesses",
+    ];
+    return protectedPrefixes.some(
+      (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+    );
+  };
 
-  const isPublicRoute = publicRoutes.includes(path);
-  const isPrivateRoutes = privateRoutes.includes(path);
+  const isPrivateRoute = isProtectedRoute(path);
 
-  // 1. Redirect unauthenticated users from privates routes
-  if (!isAuthenticated && isPrivateRoutes) {
+  // 1. Redirect unauthenticated users from protected routes
+  if (!isAuthenticated && isPrivateRoute) {
     const callbackUrl = encodeURIComponent(path);
     return NextResponse.redirect(
       new URL(`/login?callback=${callbackUrl}`, request.url)
     );
   }
 
-  // 2. Check if user is aunthenticated user is trying to view public routes
-  if (isAuthenticated && isPublicRoute) {
+  // 2. Redirect authenticated users trying to access auth pages to dashboard
+  if (
+    isAuthenticated &&
+    (path === "/login" || path === "/signup" || path === "/forgot-password")
+  ) {
     return NextResponse.redirect(new URL("/businesses", request.url));
   }
 
