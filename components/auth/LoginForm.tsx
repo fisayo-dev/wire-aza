@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -61,23 +62,19 @@ export function LoginForm({
 
       try {
         axios.defaults.withCredentials = true;
-        // Direct API call from browser - cookie will be stored in browser
         const response = await axios.post(`${backendUrl}/auth/login`, {
           email: email.trim(),
           password,
         });
 
-        console.log("Login Result:", response.data);
-        console.log("Login response headers:", response.headers);
-
         if (response.data.success) {
           toast.success(response.data.message);
-          router.push("/");
+          router.push("/dashboard");
         } else {
           toast.error(response.data.message || "Something went wrong");
         }
       } catch {
-        toast.error("Something went wrong");
+        toast.error("Invalid credentials or server error");
       } finally {
         setIsLoading(false);
       }
@@ -86,23 +83,40 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Jump Right In</CardTitle>
-          <CardDescription>
-            Your account number doesn&apos;t have to appear basic.
+      <Card className="border-none shadow-2xl rounded-3xl overflow-hidden">
+        <div className="bg-green-600 h-2 w-full"></div>
+        <CardHeader className="pt-10 pb-6 text-center">
+          <div className="w-12 h-12 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-6 h-6" />
+          </div>
+          <CardTitle className="text-3xl font-black text-gray-900">
+            Welcome Back
+          </CardTitle>
+          <CardDescription className="text-base">
+            Log in to manage your professional account details.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-8 pb-10">
           <form onSubmit={handleSubmit}>
-            <FieldGroup>
+            <FieldGroup className="gap-5">
               <GoogleOauthBtn />
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-gray-100"></span>
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white px-2 text-gray-400">Or continue with</span>
+                </div>
+              </div>
+
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldLabel htmlFor="email" className="text-gray-700 font-semibold">Email</FieldLabel>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="name@example.com"
+                  className="rounded-xl border-gray-200 h-12 focus:ring-green-500"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
@@ -119,17 +133,18 @@ export function LoginForm({
               </Field>
               <Field>
                 <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <FieldLabel htmlFor="password" className="text-gray-700 font-semibold">Password</FieldLabel>
                   <a
                     href="#"
-                    className="ml-auto text-sm underline-offset-4 hover:underline"
+                    className="ml-auto text-sm text-green-600 font-medium hover:underline"
                   >
-                    Forgot your password?
+                    Forgot password?
                   </a>
                 </div>
                 <Input
                   id="password"
                   type="password"
+                  className="rounded-xl border-gray-200 h-12 focus:ring-green-500"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -144,14 +159,20 @@ export function LoginForm({
                   </FieldDescription>
                 )}
               </Field>
-              <Field>
-                <Button type="submit" className="w-full" disabled={isLoading}>
+              <Field className="pt-2">
+                <Button
+                  type="submit"
+                  className="w-full h-12 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold text-lg shadow-lg shadow-green-100 transition-all active:scale-95"
+                  disabled={isLoading}
+                >
                   {isLoading ? "Logging in..." : "Log In"}
                 </Button>
-                <FieldDescription className="text-center">
+                <div className="mt-6 text-center text-gray-500">
                   Don&apos;t have an account?{" "}
-                  <Link href="/signup">Sign up</Link>
-                </FieldDescription>
+                  <Link href="/signup" className="text-green-600 font-bold hover:underline">
+                    Sign up free
+                  </Link>
+                </div>
               </Field>
             </FieldGroup>
           </form>
