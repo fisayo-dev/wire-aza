@@ -1,13 +1,15 @@
 import Header from "@/components/wire-aza/Header";
 import Landing from "@/components/wire-aza/Landing";
+import Footer from "@/components/wire-aza/Footer";
 
 export default function Home() {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="mt-20">
+      <main className="flex-grow mt-20">
         <Landing />
-      </div>
+      </main>
+      <Footer />
     </div>
   );
 }
